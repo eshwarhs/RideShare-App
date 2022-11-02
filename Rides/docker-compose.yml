@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  rides:
+    container_name: rides
+    build: .
+    image: rides:latest
+    command: gunicorn -w 3 rides:app -b 0.0.0.0:8000
+    restart: always
+    ports:
+      - "80:8000"
+    environment:
+      - TEAM_NAME=CC_0193_0924_1085

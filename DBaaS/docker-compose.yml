@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+
+
+  zoo:
+    container_name: zoo
+    image: zookeeper
+    restart: on-failure
+    hostname: zoo
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
+
+  orchestrator:
+    container_name: orchestrator
+    build: ./Orchestrator
+    image: orchestrator
+    depends_on:
+      - rabbitmq
+    command: sh -c "sleep 45 && python -u orch.py"
+    restart: on-failure
+    ports:
+      - "80:80"
+
+  
+
+
+
